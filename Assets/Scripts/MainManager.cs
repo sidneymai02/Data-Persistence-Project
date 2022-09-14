@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainManager : MonoBehaviour
 {
+    
     public Brick BrickPrefab;
     public int LineCount = 6;
     public Rigidbody Ball;
@@ -18,10 +20,13 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
+    public TextMeshProUGUI highScoreText;
+
     
     // Start is called before the first frame update
     void Start()
     {
+        UpdateHighScore();
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -66,7 +71,22 @@ public class MainManager : MonoBehaviour
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+        HighScore();
     }
+
+    void HighScore()
+    {
+        if (m_Points > PlayerPrefs.GetInt("HighScore", 0))
+        {
+            PlayerPrefs.SetInt("HighScore", m_Points);
+        }
+    }
+
+    void UpdateHighScore()
+    {
+        highScoreText.text = $"  {PlayerPrefs.GetInt("HighScore", 0)}";
+    }
+
 
     public void GameOver()
     {
